@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EAVIGATE - Full Campus Navigation</title>
+<style>
+body{margin:0;font-family:Arial;background:url("eac.jpg") no-repeat center center/cover;
+    min-height: 100vh; background-color: #f5f5dc;
+}
+.container{text-align:center;padding:20px;}
+h1,h2,h3{color:#c40018;}
+.main-button{
+  width:90%;max-width:350px;padding:14px;margin:8px auto;
+  display:block;border-radius:30px;border:2px solid #c40018;
+  background:white;cursor:pointer;font-size:15px;transition:0.3s;
+}
+.main-button:hover{background:#c40018;color:white;}
+.hidden{display:none;}
+.column-container{display:flex;justify-content:center;gap:20px;margin-top:20px;flex-wrap:wrap;}
+.column{background:#c40018;color:white;padding:20px;border-radius:15px;cursor:pointer;width:150px;flex:1;max-width:200px;}
+.column:hover{opacity:0.8;}
+#map{width:95%;height:500px;margin:15px auto;border-radius:10px;display:block;}
+.info-box{max-width:800px;margin:auto;background:#fff3f0;padding:20px;border-radius:10px;text-align:left;box-shadow:0 4px 8px rgba(0,0,0,0.1);}
+.directions-btn{background:#4CAF50;border-color:#4CAF50;color:white;margin-top:10px;}
+.directions-btn:hover{background:white;color:#4CAF50;}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="container" id="home">
+<h1>EAVIGATE</h1>
+<p style="color:#666;font-size:18px;">EAC-Cavite Campus Navigation</p>
+<button class="main-button" onclick="showFind()">Find a Room</button>
+<button class="main-button" onclick="showAccessibility()">Accessibility Route</button>
+<button class="main-button" onclick="showCampusInfo()">Campus Info</button>
+</div>
+
+<!-- FIND -->
+<div class="container hidden" id="find">
+<h2>Choose Category</h2>
+<button class="main-button" onclick="showCategory('classroom')">Classrooms</button>
+<button class="main-button" onclick="showCategory('office')">Offices</button>
+<button class="main-button" onclick="showCategory('lab')">Laboratories</button>
+<button class="main-button" onclick="showOutdoor()">Outdoor Areas</button>
+<button class="main-button" onclick="goHome()">Back to Home</button>
+</div>
+
+<!-- LIST SCREEN -->
+<div class="container hidden" id="listScreen">
+<h2 id="listTitle"></h2>
+<div id="roomList" style="max-height:400px;overflow-y:auto;margin:20px 0;"></div>
+<button class="main-button" onclick="goFind()">Back</button>
+</div>
+
+<!-- MAP CONTAINER -->
+<div class="container hidden" id="mapScreen">
+<h2 id="mapTitle"></h2>
+<div id="map"></div>
+<div style="text-align:center;margin:20px 0;">
+<button class="main-button directions-btn" id="directionsBtn" onclick="getDirections(currentRoom)">🚗 Get Directions</button>
+<button class="main-button" onclick="goFind()">Back</button>
+</div>
+</div>
+
+<!-- OUTDOOR -->
+<div class="container hidden" id="outdoor">
+<h2>🏟️ Outdoor Activity Areas</h2>
+<div class="column-container">
+<div class="column" onclick="showMapKML('Football Field')">Football Field</div>
+<div class="column" onclick="showMapKML('Friendship Oval')"> Friendship Oval</div>
+<div class="column" onclick="showMapKML('Covered Court')"> Covered Court</div>
+<div class="column" onclick="showMapKML('Social Hall')"> Social Hall</div>
+</div>
+<button class="main-button" onclick="goFind()"> Back</button>
+</div>
+
+<!-- CAMPUS INFO -->
+<div class="container hidden" id="campusInfo">
+<h2>📚 About Emilio Aguinaldo College – Cavite Campus</h2>
+<div class="info-box">
+<p>Emilio Aguinaldo College - Cavite Campus is a private, non-sectarian, co-educational higher education institution located in Burol Main, Dasmariñas City, Cavite, Philippines. It is one of the two main campuses of Emilio Aguinaldo College (the other being in Manila) and serves a large and diverse student community. The Cavite campus has grown significantly since its establishment in 1996 and now offers a broad range of academic programs and facilities for senior high school, undergraduate, and graduate students.</p>
+
+<h3>📍 Campus Location & Contact</h3>
+<p><strong>Address:</strong> Gov. D. Mangubat Avenue, Brgy. Burol Main, City of Dasmariñas, Cavite 4114, Philippines<br>
+<strong>Phone:</strong> (+63) 46 416-4341 to 42<br>
+<strong>Email:</strong> <a href="mailto:admission_cavite@eac.edu.ph">admission_cavite@eac.edu.ph</a><br>
+<strong>Website:</strong> <a href="http://www.eac.edu.ph" target="_blank">www.eac.edu.ph</a></p>
+
+<h3>🎓 Academic Programs</h3>
+<p><strong>Senior High School:</strong> Academic Tracks: ABM, STEM, HumSS | Technical-Vocational Tracks: ICT, Culinary, Tourism, Automotive, Electronics, and more</p>
+<p><strong>Undergraduate Degrees:</strong> Business and Management, Criminology, Nursing and Health Sciences, Engineering and Technology, Psychology and Humanities, Law (Juris Doctor) — the Campus' own law school, one of the first in Cavite</p>
+<p><strong>Graduate Studies:</strong> Advanced programs in education, criminal justice, nursing, and related fields</p>
+
+<h3>🏗️ Campus Facilities</h3>
+<p>The campus features multiple academic buildings, a library, science and computer labs, a covered court, sports oval, and student-friendly spaces. EAC Cavite continually expands infrastructure to accommodate a growing student population and new program offerings.</p>
+
+<h3>👥 Student Life & Community</h3>
+<p>EAC Cavite fosters a supportive learning environment with active student organizations, academic support services, and preparation for professional careers. It emphasizes character development, community involvement, and real-world experience through internships and partnerships with local industries and healthcare facilities.</p>
+
+<h3>📝 Admissions</h3>
+<p>Prospective students can apply online or visit the admissions office to start enrollment. EAC Cavite welcomes fresh high school graduates, transfer students, and those seeking to pursue college degrees or graduate studies.</p>
+</div>
+<button class="main-button" onclick="goHome()">⬅️ Back</button>
+</div>
+
+<!-- ACCESSIBILITY -->
+<div class="container hidden" id="accessibility">
+<h2>♿ EAC Cavite – Accessibility Route Summary</h2>
+<div class="info-box">
+<p><strong>EAC Cavite ensures a safe and inclusive campus with barrier-free access to classrooms, offices, and facilities for Persons with Disabilities (PWDs) and visitors with mobility needs.</strong></p>
+
+<h3>🚪 Accessible Entrances & Lobbies</h3>
+<ul>
+<li>Entrance Lobby (Building 1 – Ground Floor)</li>
+<li>Lobby 1 – Activity Center</li>
+<li>Lobby 2 – Parking Area</li>
+<li>Lobby 3</li>
+<li>All lobbies provide wheelchair access and wide pathways</li>
+</ul>
+
+<h3>🏫 Accessible Classrooms</h3>
+<p><strong>Building 1:</strong> Ground Floor: 1101, 1108, 1109, 1110<br>
+<strong>Building 2:</strong> Second Floor: 2201-2210 | Third Floor: 2301, 2307, 2308, 2309<br>
+<strong>Building 4:</strong> Second Floor: 4202, 4204, 4206<br>
+<strong>Building 5:</strong> Second Floor: 5201-5210<br>
+<strong>Building 3 & Extension:</strong> Ground Floor: 3102-B, 3105 | Extension: 3E104, 3E105, 3E106</p>
+
+<h3>🚻 Accessible Comfort Rooms</h3>
+<ul>
+<li>Building 2: Ground, Second, and Third Floors</li>
+<li>Building 4: Ground & Second Floors</li>
+<li>Building 5: Ground & Second Floors</li>
+<li>Building 3 Extension: Ground Floor</li>
+</ul>
+
+<h3>🏢 Accessible Offices & Support</h3>
+<ul>
+<li>Office of Student Affairs (Bldg 1 – Ground Floor)</li>
+<li>Students Recruitment & Admissions (Bldg 1 – Ground Floor)</li>
+<li>Accounting Office, Registrar, Credit & Collection (Bldg 2 – Ground Floor)</li>
+<li>Guidance Office (Bldg 2 – Ground Floor)</li>
+<li>Deans, President, and VP Offices (Bldg 1 – Second Floor)</li>
+</ul>
+
+<h3>🚗 Parking & Routes</h3>
+<ul>
+<li>Lobby 2 – Parking Area: PWD-friendly parking & drop-off</li>
+<li>Wide pathways & ramps connecting major academic, administrative, and support facilities</li>
+</ul>
+
+<p><strong>✅ Summary:</strong> All main lobbies are barrier-free. Ground floors and key classrooms/offices are accessible. Comfort rooms and health/counseling services are accessible. Ramps, wide corridors, and clear pathways ensure smooth mobility across campus.</p>
+</div>
+<button class="main-button" onclick="goHome()">⬅️ Back</button>
+</div>
+
+<script>// ========== ROOM COORDINATES DATABASE ==========
+const roomCoords = {
+    // BLDG 1
+    "1101": {lat: 14.3265417, lng: 120.9460056},
+    "1108": {lat: 14.326543, lng: 120.946007},
+    "1109": {lat: 14.326544, lng: 120.946008},
+    "1110": {lat: 14.326545, lng: 120.946009},
+    
+    // BLDG 2
+    "2202": {lat: 14.3264056, lng: 120.9460167},
+    "2204": {lat: 14.326407, lng: 120.946018},
+    "2206": {lat: 14.326408, lng: 120.946019},
+    "2208": {lat: 14.326409, lng: 120.946020},
+    "2201": {lat: 14.326406, lng: 120.946017},
+    
+    // BLDG 3
+    "3102-B": {lat: 14.3261083, lng: 120.9460278},
+    "3105": {lat: 14.326110, lng: 120.946029},
+    
+    // BLDG 4
+    "4202": {lat: 14.3258333, lng: 120.9460317},
+    "4204": {lat: 14.325834, lng: 120.946032},
+    
+    // BLDG 5
+    "5202": {lat: 14.3255417, lng: 120.9460333},
+    "5204": {lat: 14.325543, lng: 120.946034},
+    
+    // OUTDOOR
+    "Football Field": {lat: 14.3236028, lng: 120.9460483},
+    "Friendship Oval": {lat: 14.3236028, lng: 120.9460483},
+    "Covered Court": {lat: 14.3240417, lng: 120.9466667},
+    "Social Hall": {lat: 14.324525, lng: 120.9457694}
+};
+
+// EAC MAIN ENTRANCE for directions
+const EAC_ENTRANCE = {lat: 14.3265762, lng: 120.9459228};
+
+// ========== DATA ARRAYS (Updated) ==========
+const classrooms = Object.keys(roomCoords).filter(key => /\d/.test(key));
+const offices = ["Office of the Students Affairs","Students Recruitment and Admission Office","Human Resource Office","Vice President of Academic Affairs","President's Office"];
+const labs = ["Robotics Laboratory","Medical Technology Laboratory","Physical Therapy Laboratory","Chemistry Laboratory","Physics Laboratory"];
+
+// Global variables
+let map, kmlLayer, currentRoom = '';
+
+function hideAll(){
+    ['home','find','listScreen','mapScreen','outdoor','campusInfo','accessibility'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.classList.add('hidden');
+    });
+}
+
+// Navigation functions
+function showFind(){ hideAll(); document.getElementById('find').classList.remove('hidden'); }
+function goHome(){ hideAll(); document.getElementById('home').classList.remove('hidden'); clearMap(); }
+function goFind(){ hideAll(); document.getElementById('find').classList.remove('hidden'); clearMap(); }
+function showOutdoor(){ hideAll(); document.getElementById('outdoor').classList.remove('hidden'); }
+function showCategory(type){
+    hideAll();
+    const listContainer = document.getElementById('roomList');
+    const title = document.getElementById('listTitle');
+    listContainer.innerHTML = '';
+    
+    let data = [], titleText = '';
+    if(type === 'classroom'){ titleText = ' Classrooms'; data = classrooms; }
+    else if(type === 'office'){ titleText = ' Offices'; data = offices; }
+    else if(type === 'lab'){ titleText = ' Laboratories'; data = labs; }
+    
+    title.innerText = titleText;
+    data.slice(0,20).forEach(item => { // Limit display
+        const btn = document.createElement('button');
+        btn.className = 'main-button';
+        btn.innerText = item;
+        btn.onclick = () => showMapKML(item);
+        listContainer.appendChild(btn);
+    });
+    document.getElementById('listScreen').classList.remove('hidden');
+}
+
+function showMapKML(title){
+    currentRoom = title;
+    hideAll();
+    document.getElementById('mapScreen').classList.remove('hidden');
+    document.getElementById('mapTitle').innerText = title;
+    document.getElementById('directionsBtn').innerText = ` Get Directions to ${title}`;
+    
+    if(!map){
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 14.3265417, lng: 120.9460056},
+            zoom: 17,
+            mapTypeId: 'satellite'
+        });
+    }
+    
+    clearMap();
+    
+    // Add room marker
+    if(roomCoords[title]){
+        const pos = roomCoords[title];
+        map.setCenter(pos);
+        map.setZoom(19);
+        
+        new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: `${title} - EA VIGATE`,
+            icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        });
+    }
+    
+    // Load KML overlay
+    kmlLayer = new google.maps.KmlLayer({
+        url: 'https://drive.google.com/uc?export=download&id=1P6qvvP5-nrHTfVZgva0Rm1svPg80H6Ft',
+        map: map,
+        preserveViewport: false
+    });
+}
+
+function getDirections(room){
+    const dest = roomCoords[room] || roomCoords['1101'];
+    const url = `https://www.google.com/maps/dir/Emilio+Aguinaldo+College,+Cavite+Campus,8WGW+J9M,+Burol+Main,+Dasmari%C3%B1as,+Cavite/${dest.lat},${dest.lng}/@${EAC_ENTRANCE.lat},${EAC_ENTRANCE.lng}`;
+    window.open(url, '_blank');
+}
+
+function clearMap(){
+    if(kmlLayer) kmlLayer.setMap(null);
+    kmlLayer = null;
+}
+
+function initMap(){}
+</script>
+
+<!-- REPLACE WITH YOUR GOOGLE MAPS API KEY -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+
+<!-- MISSING SECTIONS (add your original content) -->
+<div class="container hidden" id="campusInfo">
+<h2>About EAC-Cavite</h2>
+<div class="info-box">Your campus info content here...</div>
+<button class="main-button" onclick="backToHome()">Back</button>
+</div>
+
+<div class="container hidden" id="accessibility">
+<h2>Accessibility Routes</h2>
+<div class="info-box">Your accessibility content here...</div>
+<button class="main-button" onclick="backToHome()">Back</button>
+</div>
+
+</body>
+</html>
